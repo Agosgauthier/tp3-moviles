@@ -1,0 +1,8 @@
+{
+  "expo": {
+    "plugins": [
+      "expo-sqlite",
+      "@react-native-async-storage/async-storage"
+    ]
+  }
+}
