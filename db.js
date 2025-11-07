@@ -1,13 +1,10 @@
-// db.js
 import { openDatabaseAsync } from "expo-sqlite";
 
 let db;
 
-// Inicializa base de datos y crea tablas
 export const initDB = async () => {
   db = await openDatabaseAsync("tp3app.db");
 
-  // Tabla de usuarios
   await db.execAsync(`
     CREATE TABLE IF NOT EXISTS usuarios (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,17 +15,15 @@ export const initDB = async () => {
     );
   `);
 
-  // Crear usuario admin por defecto si no existe
-  const result = await db.getAllAsync("SELECT * FROM usuarios WHERE rol='admin'");
-  if (result.length === 0) {
-    await db.runAsync(
-      "INSERT INTO usuarios (nombre, username, password, rol) VALUES (?, ?, ?, ?)",
-      ["Administrador", "admin", "admin123", "admin"]
-    );
-  }
+  await db.runAsync(
+    "INSERT INTO usuarios (nombre, username, password, rol) VALUES (?, ?, ?, ?)",
+    ["Administrador", "Admin", "Admin123", "Admin"]
+  );
+
+  const users = await db.getAllAsync("SELECT * FROM usuarios");
+  console.log("Usuarios actuales:", users);
 };
 
-// 🔐 Login
 export const loginUser = async (username, password) => {
   if (!db) db = await openDatabaseAsync("tp3app.db");
   const result = await db.getAllAsync(
@@ -38,7 +33,6 @@ export const loginUser = async (username, password) => {
   return result.length > 0 ? result[0] : null;
 };
 
-// CRUD usuarios (solo admin)
 export const getUsuarios = async () => {
   if (!db) db = await openDatabaseAsync("tp3app.db");
   return await db.getAllAsync("SELECT * FROM usuarios");

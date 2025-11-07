@@ -1,10 +1,10 @@
-// screens/UserScreen.js
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, Button, Image, StyleSheet } from "react-native";
+import { View, Text, FlatList, Button, Image, StyleSheet, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function UserScreen({ setUserSession }) {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const logout = async () => {
     await AsyncStorage.removeItem("user");
@@ -13,17 +13,35 @@ export default function UserScreen({ setUserSession }) {
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const apiKey = "TU_API_KEY_DE_TMDB"; // 🔑 reemplazala por tu key real
-      const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=es-ES`);
-      const data = await res.json();
-      setMovies(data.results);
+      try {
+        const apiKey = "8f6f9aeb5ab319851313788ca63a54c3";
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=es-ES`
+        );
+        const data = await response.json();
+        setMovies(data.results || []);
+      } catch (error) {
+        console.log("Error al obtener películas:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchMovies();
   }, []);
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="blue" />
+        <Text style={{ marginTop: 10 }}>Cargando películas...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>🎬 Películas populares</Text>
+
       <FlatList
         data={movies}
         keyExtractor={(item) => item.id.toString()}
@@ -37,15 +55,17 @@ export default function UserScreen({ setUserSession }) {
           </View>
         )}
       />
+
       <Button title="Cerrar sesión" onPress={logout} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 15 },
+  container: { flex: 1, padding: 15, backgroundColor: "white" },
   header: { fontSize: 22, textAlign: "center", marginVertical: 10 },
   movieCard: { marginBottom: 20, alignItems: "center" },
   poster: { width: 120, height: 180, borderRadius: 10 },
   title: { marginTop: 8, textAlign: "center", fontWeight: "bold" },
+  loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white" },
 });

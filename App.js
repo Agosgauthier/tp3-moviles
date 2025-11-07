@@ -1,5 +1,5 @@
-// App.js
 import React, { useEffect, useState } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,15 +18,29 @@ export default function App() {
 
   useEffect(() => {
     const setup = async () => {
-      await initDB();
-      const savedUser = await AsyncStorage.getItem("user");
-      if (savedUser) setUserSession(JSON.parse(savedUser));
-      setLoading(false);
+      try {
+        await initDB();
+        const savedUser = await AsyncStorage.getItem("user");
+        if (savedUser) {
+          setUserSession(JSON.parse(savedUser));
+        }
+      } catch (error) {
+        console.log("⚠️ Error al iniciar la app:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     setup();
   }, []);
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white" }}>
+        <ActivityIndicator size="large" color="blue" />
+        <Text style={{ marginTop: 10, color: "black" }}>Cargando aplicación...</Text>
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
@@ -46,10 +60,13 @@ export default function App() {
           </>
         ) : (
           <Stack.Screen name="User">
-            {(props) => <UserScreen {...props} user={userSession} setUserSession={setUserSession} />}
+            {(props) => (
+              <UserScreen {...props} user={userSession} setUserSession={setUserSession} />
+            )}
           </Stack.Screen>
         )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
