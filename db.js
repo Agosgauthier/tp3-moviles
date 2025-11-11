@@ -15,13 +15,43 @@ export const initDB = async () => {
     );
   `);
 
-  await db.runAsync(
-    "INSERT INTO usuarios (nombre, username, password, rol) VALUES (?, ?, ?, ?)",
-    ["Administrador", "Admin", "Admin123", "Admin"]
+  const existingAdmin = await db.getAllAsync(
+    "SELECT * FROM usuarios WHERE username = ?",
+    ["Admin"]
   );
 
+  if (existingAdmin.length === 0) {
+    await db.runAsync(
+      "INSERT INTO usuarios (nombre, username, password, rol) VALUES (?, ?, ?, ?)",
+      ["Administrador", "Admin", "Admin123", "admin"]
+    );
+    console.log("Administrador creado por primera vez ✅");
+  } else {
+    console.log("Administrador ya existe, no se duplica 👌");
+  }
+
+   const defaultUsers = [
+    ["Juan Perez", "Juan_Perez", "Juan123", "user"],
+    ["Romina Garcia", "Romina_Garcia", "Romina123", "user"],
+    ["Agostina Gauthier", "Agostina_Gauthier", "Agostina123", "user"],
+  ];
+
+  for (const [nombre, username, password, rol] of defaultUsers) {
+    const existingUser = await db.getAllAsync(
+      "SELECT * FROM usuarios WHERE username = ?",
+      [username]
+    );
+    if (existingUser.length === 0) {
+      await db.runAsync(
+        "INSERT INTO usuarios (nombre, username, password, rol) VALUES (?, ?, ?, ?)",
+        [nombre, username, password, rol]
+      );
+      console.log(`Usuario ${username} creado ✅`);
+    }
+  }
+
   const users = await db.getAllAsync("SELECT * FROM usuarios");
-  console.log("Usuarios actuales:", users);
+  console.log("Usuarios actuales en la base:", users);
 };
 
 export const loginUser = async (username, password) => {

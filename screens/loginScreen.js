@@ -24,14 +24,18 @@ export default function LoginScreen({ setUserSession }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>🎬 TP3 - Login</Text>
+
+      <Text style={styles.label}>Usuario:</Text>
       <TextInput
-        placeholder="Usuario"
+        placeholder="Ingresa tu Usuario"
         style={styles.input}
         value={username}
         onChangeText={setUsername}
       />
+
+      <Text style={styles.label}>Contraseña:</Text>
       <TextInput
-        placeholder="Contraseña"
+        placeholder="Ingresa tu Contraseña"
         style={styles.input}
         secureTextEntry
         value={password}

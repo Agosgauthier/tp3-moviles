@@ -4,7 +4,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { initDB } from "./db";
-
 import LoginScreen from "./screens/loginScreen";
 import AdminScreen from "./screens/adminScreen";
 import UserScreen from "./screens/userScreen";
@@ -69,4 +68,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-

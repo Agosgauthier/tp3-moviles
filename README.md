@@ -9,7 +9,8 @@ Esta app permite:
 - Iniciar sesión con credenciales guardadas en SQLite.  
 - Crear, editar y eliminar usuarios (solo disponible para el rol “admin”).  
 - Administrar usuarios desde una interfaz simple y funcional.  
-- Guardar la sesión activa localmente con AsyncStorage.  
+- Guardar la sesión activa localmente con AsyncStorage.
+- Acceder a una lista de películas desde la API externa The Movie DB (solo rol “user”).
 
 El sistema crea automáticamente un usuario **Administrador** la primera vez que se ejecuta la app:  
 ---
@@ -39,3 +40,32 @@ expo install react-native-screens react-native-gesture-handler
 
 # Iniciar el servidor de desarrollo
 npx expo start
+
+---
+
+👥 Credenciales para probar el sistema
+
+👑 Administrador
+Usuario: Admin
+Contraseña: Admin123
+Rol: admin
+
+🎬 Usuarios estándar (rol user)
+
+Nombre: Juan 
+Apellido: Perez
+Usuario: Juan_Perez
+Contraseña: Juan123
+Rol: user
+
+Nombre: Romina 
+Apellido: Garcia
+Usuario: Romina_Garcia
+Contraseña: Romina123
+Rol: user
+
+Nombre: Agostina 
+Apellido: Gauthier
+Usuario: Agostina_Gauthier
+Contraseña: Agostina123
+Rol: user

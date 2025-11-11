@@ -20,12 +20,12 @@ export default function UserFormScreen({ navigation, route }) {
     const nombreCompleto = `${nombre} ${apellido}`;
 
     if (usuario) {
-      await updateUsuario(usuario.id, nombreCompleto, username, password, rol);
-      Alert.alert("Éxito", "Usuario actualizado correctamente");
-    } else {
-      await addUsuario(nombreCompleto, username, password, rol);
-      Alert.alert("Éxito", "Usuario agregado correctamente");
-    }
+  await updateUsuario(usuario.id, nombreCompleto, username, password, rol.toLowerCase());
+  Alert.alert("Éxito", "Usuario actualizado correctamente");
+} else {
+  await addUsuario(nombreCompleto, username, password, rol.toLowerCase());
+  Alert.alert("Éxito", "Usuario agregado correctamente");
+}
 
     navigation.goBack();
   };
